@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using BugTracker.Data;
 using BugTracker.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BugTracker.Controllers
 {
@@ -31,6 +32,12 @@ namespace BugTracker.Controllers
             return View();
         }
 
+        // POST: Bugs/ShowSearchResults
+        public async Task<IActionResult> ShowSearchResults(String SearchPhrase)
+        {
+            return View("Index", await _context.Bug.Where( b => b.Description.Contains(SearchPhrase)).ToListAsync());
+        }
+
         // GET: Bugs/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -50,6 +57,7 @@ namespace BugTracker.Controllers
         }
 
         // GET: Bugs/Create
+        [Authorize]
         public IActionResult Create()
         {
             return View();
